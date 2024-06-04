@@ -33,8 +33,8 @@ db: # Stop docker containers
 
 .PHONY: migrate postgresql up
 migrateup: # migrate postgresql up
-	migrate -path ./db/migrations -database "postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable" up
+	migrate -path ./db/migrations -database "postgresql://root:1234@localhost:5432/medical-service?sslmode=disable" up
 
 .PHONY: migrate postgresql down
 migratedown: # migrate postgresql down
-	migrate -path ./db/migrations -database "postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable" down
+	migrate -path ./db/migrations -database "postgresql://root:1234@localhost:5432/medical-service?sslmode=disable" down
