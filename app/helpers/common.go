@@ -28,7 +28,7 @@ func CheckRequiredEnvs() {
 		"DB_PORT",
 		"DB_HOST",
 		"DB_NAME",
-		"DB_OWNER",
+		"DB_USER",
 		"DB_PASSWORD",
 	}
 
