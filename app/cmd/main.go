@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	log "github.com/sirupsen/logrus"
 
 	"github.com/JABRONY00/medical_administration_platform/app/api"
@@ -21,7 +19,8 @@ func init() {
 func main() {
 	router := gin.Default()
 	api.Routes(router)
-	err := router.Run(fmt.Sprintf("Starting server on port: %v ...", SERVER_PORT))
+	err := router.Run("localhost:4000")
+
 	if err != nil {
 		log.Panicf("Failed to start server!: %v", err.Error())
 	}
