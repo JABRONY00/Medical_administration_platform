@@ -3,6 +3,8 @@ package initializers
 import (
 	"context"
 	"fmt"
+	"os"
+	"os/exec"
 
 	"github.com/JABRONY00/medical_administration_platform/app/helpers"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -31,6 +33,23 @@ func ConnectDb() *pgxpool.Pool {
 		log.Panicf("DB Ping failed: %v", err.Error())
 	}
 
+	runMigrations()
+
 	log.Infof("DB connected successfully on port: %v", DB_PORT)
 	return dbpool
+}
+
+func runMigrations() {
+	psqlInfo := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
+
+	cmd := exec.Command("migrate", "-path", "db/migrations", "-database", psqlInfo, "up")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	err := cmd.Run()
+	if err != nil {
+		log.Panicf("Migrations error: %v", err)
+	}
+
+	log.Info("Migrations have passed!")
 }
