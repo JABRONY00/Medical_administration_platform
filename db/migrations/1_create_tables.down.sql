@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS clients;
+DROP TABLE IF EXISTS departments;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS employees;
+DROP TABLE IF EXISTS rooms;
+DROP TABLE IF EXISTS employee_rooms;
+DROP TABLE IF EXISTS room_storage;
+DROP TABLE IF EXISTS appointments;
+DROP TABLE IF EXISTS medical_sessions;
+DROP TABLE IF EXISTS medical_cards;
+DROP TABLE IF EXISTS shifts;
+DROP TABLE IF EXISTS time_off;
