@@ -1,33 +1,40 @@
 package helpers
 
 import (
-	"golang.org/x/crypto/bcrypt"
+	"fmt"
+	"os"
+
+	log "github.com/sirupsen/logrus"
+
+	"github.com/joho/godotenv"
 )
 
-/*func GetEnv(key string) string {
+func GetEnv(key string) string {
 	err := godotenv.Load(".env")
 
 	if err != nil {
 		log.Panicf("Error loading .env file: %v", err)
 	}
 	return os.Getenv(key)
-}*/
+}
 
-/*func CheckRequiredEnvs() {
-	requiredEnvVars := []string{"SERVER_PORT", "LOG_LEVEL"}
+func CheckRequiredEnvs() {
+	requiredEnvVars := []string{
+		"SERVER_PORT",
+		"SERVER_HOST",
+
+		"LOG_LEVEL",
+
+		"DB_PORT",
+		"DB_HOST",
+		"DB_NAME",
+		"DB_OWNER",
+		"DB_PASSWORD",
+	}
+
 	for _, envVar := range requiredEnvVars {
 		if value, exists := os.LookupEnv(envVar); !exists || value == "" {
 			log.Panic(fmt.Sprintf("Error: Environment variable %v is not set.", envVar))
 		}
 	}
-}*/
-
-func HashPassword(password string) (string, error) {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	return string(hashedPassword), err
-}
-
-func CheckPassword(password string, hashedPassword string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
-	return err == nil
 }
