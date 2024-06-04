@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var SERVER_PORT = 4000
+var SERVER_PORT = "4000"
 
 func init() {
 

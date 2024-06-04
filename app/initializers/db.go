@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	DB_PORT     = 5000
+	DB_PORT     = "5000"
 	DB_HOST     = "localhost"
 	DB_NAME     = "j"
 	DB_OWNER    = "j"
