@@ -22,8 +22,8 @@ func init() {
 
 func main() {
 	router := gin.Default()
-	initializers.ConnectDb()
-	api.Routes(router)
+	db := initializers.ConnectDb()
+	api.Routes(router, db)
 
 	err := router.Run(fmt.Sprintf("%v:%v", SERVER_HOST, SERVER_PORT))
 
