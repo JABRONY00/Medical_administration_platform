@@ -3,6 +3,7 @@ package employees
 import "github.com/gin-gonic/gin"
 
 func CreateEmployee(c *gin.Context) {
+
 }
 func GetEmployees(c *gin.Context) {
 

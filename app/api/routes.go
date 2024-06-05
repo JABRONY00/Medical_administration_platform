@@ -8,5 +8,7 @@ import (
 )
 
 func Routes(r *gin.Engine, db *pgxpool.Pool) {
+	InitMiddlewares(r)
+
 	employees.Routes(r, db)
 }
