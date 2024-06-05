@@ -18,16 +18,37 @@ const (
 	Info
 )
 
+const (
+	FieldMethod     = "method"
+	FieldPath       = "path"
+	FieldStatusCode = "statusCode"
+	FieldClientIP   = "client_ip"
+	FieldDurationMs = "duration_ms"
+	FieldUserAgent  = "user_agent"
+)
+
 func HttpLog(c *gin.Context, level LogLevel, httpStatus int, message string) {
-	startTime := c.MustGet("startTime")
+	startTimeValue, exists := c.Get("startTime")
+	if !exists {
+		log.Error("startTime not found in context")
+		startTimeValue = time.Now() // чтобы избежать паники, если startTime не найден
+	}
+
+	startTime, ok := startTimeValue.(time.Time)
+	if !ok {
+		log.Error("startTime has incorrect type")
+		startTime = time.Now()
+	}
+
+	durationMs := time.Since(startTime).Milliseconds()
 
 	fields := log.Fields{
-		"method":      c.Request.Method,
-		"path":        c.Request.URL.Path,
-		"statusCode":  httpStatus,
-		"client_ip":   c.ClientIP(),
-		"duration_ms": time.Since(startTime.(time.Time)) / 1000000,
-		"user_agent":  c.Request.UserAgent(),
+		FieldMethod:     c.Request.Method,
+		FieldPath:       c.Request.URL.Path,
+		FieldStatusCode: httpStatus,
+		FieldClientIP:   c.ClientIP(),
+		FieldDurationMs: durationMs,
+		FieldUserAgent:  c.Request.UserAgent(),
 	}
 
 	switch level {
