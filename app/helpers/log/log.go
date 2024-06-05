@@ -3,8 +3,9 @@ package log
 import (
 	"time"
 
-	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
+
+	"github.com/gin-gonic/gin"
 )
 
 type HttpLogInfo struct{}
@@ -13,6 +14,7 @@ type LogLevel int
 
 const (
 	Panic LogLevel = iota
+	Fatal
 	Error
 	Warn
 	Info

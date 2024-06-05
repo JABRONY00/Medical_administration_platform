@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 
+	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/JABRONY00/medical_administration_platform/app/api"
 	"github.com/JABRONY00/medical_administration_platform/app/helpers"
 	"github.com/JABRONY00/medical_administration_platform/app/initializers"
-	"github.com/gin-gonic/gin"
 )
 
 var SERVER_PORT = helpers.GetEnv("SERVER_PORT")

@@ -6,9 +6,10 @@ import (
 	"os"
 	"os/exec"
 
+	log "github.com/sirupsen/logrus"
+
 	"github.com/JABRONY00/medical_administration_platform/app/helpers"
 	"github.com/jackc/pgx/v5/pgxpool"
-	log "github.com/sirupsen/logrus"
 )
 
 var (
