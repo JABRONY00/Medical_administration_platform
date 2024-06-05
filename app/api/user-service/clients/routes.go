@@ -10,9 +10,9 @@ var DB *pgxpool.Pool
 func Routes(r *gin.Engine, db *pgxpool.Pool) {
 	DB = db
 
-	r.POST("/employees", CreateClient)
-	r.GET("/employees", GetClients)
-	r.GET("/employees/:id", GetClient)
-	r.DELETE("/employees/:id", DeleteClient)
-	r.PUT("/employees/:id", UpdateClient)
+	r.POST("/clients", CreateClient)
+	r.GET("/clients", GetClients)
+	r.GET("/clients/:id", GetClient)
+	r.DELETE("/clients/:id", DeleteClient)
+	r.PUT("/clients/:id", UpdateClient)
 }
