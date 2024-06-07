@@ -10,12 +10,12 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/JABRONY00/medical_administration_platform/app/api/user-service/services"
+	"github.com/JABRONY00/medical_administration_platform/app/api/userMicroservice/models"
 	log "github.com/JABRONY00/medical_administration_platform/app/helpers/log"
 )
 
 func CreateClient(c *gin.Context) {
-	var client services.ClientWithPassword
+	var client models.ClientWithPassword
 	err := c.ShouldBindJSON(&client)
 	if err != nil {
 		log.HttpLog(c, log.Error, http.StatusBadRequest, "invalid request body")
@@ -23,7 +23,22 @@ func CreateClient(c *gin.Context) {
 		return
 	}
 
-	client.ID = uuid.New()
+	switch {
+	case client.FirstName == "":
+		fallthrough
+	case client.LastName == "":
+		fallthrough
+	case !(client.Gender == "M" || client.Gender == "F"):
+		fallthrough
+	case client.Email == "":
+		{
+			log.HttpLog(c, log.Error, http.StatusBadRequest, "invalid request body")
+			c.JSON(http.StatusBadRequest, "invalid request body")
+			return
+		}
+	}
+
+	client.ID = uuid.New().String()
 
 	client.PasswordHash, err = bcrypt.GenerateFromPassword([]byte(client.Password), 10)
 	if err != nil {
@@ -65,9 +80,9 @@ func GetClients(c *gin.Context) {
 	}
 	defer rows.Close()
 
-	var clients []services.ClientInfo
+	var clients []models.ClientInfo
 	for rows.Next() {
-		var client services.ClientInfo
+		var client models.ClientInfo
 		err := rows.Scan(&client.ID,
 			&client.FirstName,
 			&client.LastName,
@@ -100,7 +115,7 @@ func GetClient(c *gin.Context) {
 
 	row := DB.QueryRow(context.Background(),
 		"SELECT * FROM clients WHERE id = $1", id[0])
-	var client services.ClientInfo
+	var client models.ClientInfo
 	err := row.Scan(&client.ID,
 		&client.FirstName,
 		&client.LastName,
@@ -150,7 +165,7 @@ func UpdateClient(c *gin.Context) {
 		return
 	}
 
-	var updClient services.ClientWithPassword
+	var updClient models.ClientWithPassword
 	err := c.ShouldBindJSON(&updClient)
 	if err != nil {
 		log.HttpLog(c, log.Error, http.StatusBadRequest, "invalid request body")
@@ -160,7 +175,7 @@ func UpdateClient(c *gin.Context) {
 
 	row := DB.QueryRow(context.Background(),
 		"SELECT * FROM clients WHERE id = $1", id[0])
-	var oldClient services.ClientInfo
+	var oldClient models.ClientInfo
 	err = row.Scan(&oldClient.ID,
 		&oldClient.FirstName,
 		&oldClient.LastName,

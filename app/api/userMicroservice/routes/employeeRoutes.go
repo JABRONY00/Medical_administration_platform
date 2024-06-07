@@ -2,15 +2,11 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5/pgxpool"
 
-	"github.com/JABRONY00/medical_administration_platform/app/api/user-service/controllers"
+	"github.com/JABRONY00/medical_administration_platform/app/api/userMicroservice/controllers"
 )
 
-var DB *pgxpool.Pool
-
-func EmployeeRoutes(r *gin.Engine, db *pgxpool.Pool) {
-	DB = db
+func EmployeeRoutes(r *gin.Engine) {
 
 	r.POST("/employees", controllers.CreateEmployee)
 	r.GET("/employees", controllers.GetEmployees)

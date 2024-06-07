@@ -1,16 +1,13 @@
-package services
+package models
 
 import (
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type ClientInfo struct {
-	ID           uuid.UUID `db:"id" json:"id"`
-	FirstName    string    `db:"first_name" json:"firstName"`
-	LastName     string    `db:"last_name" json:"lastName"`
-	PasswordHash []byte    `db:"password_hash" json:"-"`
+	ID        string `db:"id" json:"id"`
+	FirstName string `db:"first_name" json:"firstName"`
+	LastName  string `db:"last_name" json:"lastName"`
 
 	BirthDate time.Time `db:"birth_date" json:"birthDate"`
 	Gender    string    `db:"gender" json:"gender"`
@@ -21,5 +18,6 @@ type ClientInfo struct {
 
 type ClientWithPassword struct {
 	ClientInfo
-	Password string `json:"password"`
+	Password     string `json:"password"`
+	PasswordHash []byte `db:"password_hash" json:"-"`
 }
