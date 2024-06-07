@@ -25,7 +25,7 @@ func main() {
 	db := initializers.ConnectDb()
 	api.Routes(router, db)
 
-	err := router.Run(fmt.Sprintf("%v:%v", SERVER_HOST, SERVER_PORT))
+	err := router.Run(fmt.Sprintf(":%v", SERVER_PORT))
 
 	if err != nil {
 		log.Panicf("Failed to start server!: %v", err.Error())
