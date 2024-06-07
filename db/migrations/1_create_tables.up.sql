@@ -1,10 +1,11 @@
 -- Создание таблицы клиентов
 CREATE TABLE clients (
-    id uuid DEFAULT gen_random_uuid(),
+    id uuid NOT NULL,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     phone VARCHAR(15),
     email VARCHAR(100),
+    password_hash BYTEA NOT NULL,
 
     birth_date DATE NOT NULL,
     gender CHAR(1) NOT NULL,
