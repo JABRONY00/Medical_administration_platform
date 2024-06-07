@@ -1,4 +1,4 @@
-package clients
+package controllers
 
 import (
 	"context"
@@ -10,11 +10,12 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 
+	"github.com/JABRONY00/medical_administration_platform/app/api/user-service/services"
 	log "github.com/JABRONY00/medical_administration_platform/app/helpers/log"
 )
 
 func CreateClient(c *gin.Context) {
-	var client ClientWithPassword
+	var client services.ClientWithPassword
 	err := c.ShouldBindJSON(&client)
 	if err != nil {
 		log.HttpLog(c, log.Error, http.StatusBadRequest, "invalid request body")
@@ -64,9 +65,9 @@ func GetClients(c *gin.Context) {
 	}
 	defer rows.Close()
 
-	var clients []ClientInfo
+	var clients []services.ClientInfo
 	for rows.Next() {
-		var client ClientInfo
+		var client services.ClientInfo
 		err := rows.Scan(&client.ID,
 			&client.FirstName,
 			&client.LastName,
@@ -99,7 +100,7 @@ func GetClient(c *gin.Context) {
 
 	row := DB.QueryRow(context.Background(),
 		"SELECT * FROM clients WHERE id = $1", id[0])
-	var client ClientInfo
+	var client services.ClientInfo
 	err := row.Scan(&client.ID,
 		&client.FirstName,
 		&client.LastName,
@@ -149,8 +150,8 @@ func UpdateClient(c *gin.Context) {
 		return
 	}
 
-	var updclient ClientWithPassword
-	err := c.ShouldBindJSON(&updclient)
+	var updClient services.ClientWithPassword
+	err := c.ShouldBindJSON(&updClient)
 	if err != nil {
 		log.HttpLog(c, log.Error, http.StatusBadRequest, "invalid request body")
 		c.JSON(http.StatusBadRequest, "invalid request body")
@@ -159,26 +160,25 @@ func UpdateClient(c *gin.Context) {
 
 	row := DB.QueryRow(context.Background(),
 		"SELECT * FROM clients WHERE id = $1", id[0])
-	var oldclient ClientInfo
-	err = row.Scan(&oldclient.ID,
-		&oldclient.FirstName,
-		&oldclient.LastName,
-		&oldclient.Phone,
-		&oldclient.Email,
-		&oldclient.PasswordHash,
-		&oldclient.BirthDate,
-		&oldclient.Gender,
-		&oldclient.Address,
+	var oldClient services.ClientInfo
+	err = row.Scan(&oldClient.ID,
+		&oldClient.FirstName,
+		&oldClient.LastName,
+		&oldClient.Phone,
+		&oldClient.Email,
+		&oldClient.PasswordHash,
+		&oldClient.BirthDate,
+		&oldClient.Gender,
+		&oldClient.Address,
 	)
 	if err != nil {
 		log.HttpLog(c, log.Error, http.StatusInternalServerError, err.Error())
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
-	id = nil
 
-	if updclient.Password != "" {
-		updclient.PasswordHash, err = bcrypt.GenerateFromPassword([]byte(updclient.Password), 10)
+	if updClient.Password != "" {
+		updClient.PasswordHash, err = bcrypt.GenerateFromPassword([]byte(updClient.Password), 10)
 		if err != nil {
 			log.HttpLog(c, log.Error, http.StatusInternalServerError, "failed to generate password hash")
 			c.AbortWithStatus(http.StatusInternalServerError)
@@ -186,25 +186,25 @@ func UpdateClient(c *gin.Context) {
 		}
 	}
 
-	updclientReflection := reflect.ValueOf(&updclient.ClientInfo).Elem()
-	oldclientReflection := reflect.ValueOf(&oldclient).Elem()
-	for i := 1; i < updclientReflection.NumField(); i++ {
-		if updclientReflection.Field(i).IsZero() {
-			updclientReflection.Field(i).Set(oldclientReflection.Field(i))
+	updClientReflection := reflect.ValueOf(&updClient.ClientInfo).Elem()
+	oldClientReflection := reflect.ValueOf(&oldClient).Elem()
+	for i := 1; i < updClientReflection.NumField(); i++ {
+		if updClientReflection.Field(i).IsZero() {
+			updClientReflection.Field(i).Set(oldClientReflection.Field(i))
 		}
 	}
-	updclient.ID = oldclient.ID
+	updClient.ID = oldClient.ID
 
 	_, err = DB.Exec(context.Background(), "UPDATE clients SET first_name = $1, last_name = $2, phone = $3, email = $4, password_hash = $5, birth_date = $6, gender = $7, address = $8 WHERE id =$9",
-		updclient.FirstName,
-		updclient.LastName,
-		updclient.Phone,
-		updclient.Email,
-		updclient.PasswordHash,
-		updclient.BirthDate,
-		updclient.Gender,
-		updclient.Address,
-		updclient.ID,
+		updClient.FirstName,
+		updClient.LastName,
+		updClient.Phone,
+		updClient.Email,
+		updClient.PasswordHash,
+		updClient.BirthDate,
+		updClient.Gender,
+		updClient.Address,
+		updClient.ID,
 	)
 	if err != nil {
 		log.HttpLog(c, log.Error, http.StatusInternalServerError, err.Error())
@@ -213,7 +213,7 @@ func UpdateClient(c *gin.Context) {
 	}
 
 	infoString := fmt.Sprintf("client with id=%s has been updated! Details: %s",
-		oldclient.ID,
+		oldClient.ID,
 		"expected",
 	)
 
