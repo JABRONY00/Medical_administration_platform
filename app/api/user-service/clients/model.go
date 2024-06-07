@@ -8,11 +8,11 @@ import (
 
 type ClientInfo struct {
 	ID           uuid.UUID `db:"id" json:"id"`
-	FirstName    string    `db:"first_name" json:"first-name"`
-	LastName     string    `db:"last_name" json:"last-name"`
+	FirstName    string    `db:"first_name" json:"firstName"`
+	LastName     string    `db:"last_name" json:"lastName"`
 	PasswordHash []byte    `db:"password_hash" json:"-"`
 
-	BirthDate time.Time `db:"birth_date" json:"birth-date"`
+	BirthDate time.Time `db:"birth_date" json:"birthDate"`
 	Gender    string    `db:"gender" json:"gender"`
 	Phone     string    `db:"phone" json:"phone"`
 	Address   string    `db:"address" json:"address"`
