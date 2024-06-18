@@ -4,7 +4,7 @@ CREATE TABLE clients (
     first_name VARCHAR(20) NOT NULL,
     last_name VARCHAR(20) NOT NULL,
     phone VARCHAR(15),
-    email VARCHAR(100), NOT NULL,
+    email VARCHAR(100) NOT NULL,
     password_hash BYTEA NOT NULL,
 
     birth_date DATE NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE rooms (
 -- Связующая таблица между сотрудниками и кабинетами (многие ко многим)
 CREATE TABLE employee_rooms (
     id SERIAL,
-    employee_id uuid,
+    employee_id VARCHAR(40),
     room_id INT,
     PRIMARY KEY (id),
     FOREIGN KEY (employee_id) REFERENCES employees(id),
@@ -88,8 +88,8 @@ CREATE TABLE appointments (
     appointment_time TIME NOT NULL,
     status VARCHAR(50),
 
-    client_id uuid,
-    employee_id uuid,
+    client_id VARCHAR(40),
+    employee_id VARCHAR(40),
     PRIMARY KEY (id),
     FOREIGN KEY (client_id) REFERENCES clients(id),
     FOREIGN KEY (employee_id) REFERENCES employees(id)
@@ -106,8 +106,8 @@ CREATE TABLE medical_sessions (
     comments TEXT,
     attached_files TEXT, -- Пути к файлам
 
-    client_id uuid,
-    employee_id uuid,
+    client_id VARCHAR(40),
+    employee_id VARCHAR(40),
     PRIMARY KEY (id),
     FOREIGN KEY (client_id) REFERENCES clients(id),
     FOREIGN KEY (employee_id) REFERENCES employees(id)
@@ -119,7 +119,7 @@ CREATE TABLE medical_cards (
     health_info TEXT NOT NULL,
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    client_id uuid,
+    client_id VARCHAR(40),
     PRIMARY KEY (id),
     FOREIGN KEY (client_id) REFERENCES clients(id)
 );
@@ -131,7 +131,7 @@ CREATE TABLE shifts (
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
 
-    employee_id uuid,
+    employee_id VARCHAR(40),
     PRIMARY KEY (id),
     FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -143,7 +143,7 @@ CREATE TABLE time_off (
     end_date DATE NOT NULL,
     type VARCHAR(50) NOT NULL, -- Тип (отпуск, больничный и т.д.)
 
-    employee_id uuid,
+    employee_id VARCHAR(40),
     PRIMARY KEY (id),
     FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE ON UPDATE CASCADE
 );

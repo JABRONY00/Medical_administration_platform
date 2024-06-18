@@ -7,9 +7,10 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/
       - postgres_db_volume:/var/lib/postgresql/data
     environment:
+      POSTGRES_DB: medical-services
       POSTGRES_USER: root
       POSTGRES_PASSWORD: 1234
       POSTGRES_PORT: 5432
